@@ -1,12 +1,7 @@
-import { toast } from "@/hooks/use-toast";
-
 const CTASection = () => {
-  const handleClick = () => {
-    toast({
-      title: "Em breve!",
-      description: "Link para o WhatsApp da 7 Produtora seria aberto aqui!",
-    });
-  };
+  const whatsappNumber = "5511964360431";
+  const message = encodeURIComponent("Olá! Vim pelo site e gostaria de agendar um diagnóstico de carreira com a 7 Produtora.");
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
 
   return (
     <section 
@@ -26,9 +21,14 @@ const CTASection = () => {
         <p className="text-muted-foreground mb-8">
           Agende um diagnóstico de carreira com nossa equipe.
         </p>
-        <button className="btn-gold" onClick={handleClick}>
+        <a 
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-gold inline-block"
+        >
           Quero Agendar Reunião
-        </button>
+        </a>
       </div>
     </section>
   );
