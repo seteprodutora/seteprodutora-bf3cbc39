@@ -13,7 +13,7 @@
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 96%;
 
-    --primary: 43 74% 49%;
+    --primary: 30 95% 55%;
     --primary-foreground: 0 0% 0%;
 
     --secondary: 0 0% 10%;
@@ -22,7 +22,7 @@
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63%;
 
-    --accent: 343 100% 60%;
+    --accent: 4 80% 55%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,24 +30,26 @@
 
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 43 74% 49%;
+    --ring: 30 95% 55%;
 
     --radius: 0.5rem;
 
-    /* Custom tokens */
-    --gold: 43 74% 49%;
-    --gold-glow: 43 74% 49%;
+    /* Custom tokens - Orange/Red gradient palette */
+    --brand-red: 4 80% 55%;
+    --brand-orange: 30 95% 55%;
+    --brand-amber: 38 95% 56%;
     --bg-dark: 0 0% 2%;
     --bg-card: 0 0% 10%;
     --text-gray: 0 0% 63%;
 
     /* Gradients */
-    --gradient-gold: linear-gradient(45deg, hsl(43, 74%, 49%), hsl(43, 74%, 36%));
+    --gradient-brand: linear-gradient(135deg, hsl(4, 80%, 55%), hsl(30, 95%, 55%), hsl(38, 95%, 56%));
+    --gradient-primary: linear-gradient(45deg, hsl(30, 95%, 55%), hsl(38, 95%, 56%));
     --gradient-dark-overlay: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8));
 
     /* Shadows */
-    --shadow-gold: 0 0 20px hsla(43, 74%, 49%, 0.4);
-    --shadow-gold-hover: 0 0 30px hsla(43, 74%, 49%, 0.7);
+    --shadow-primary: 0 0 20px hsla(30, 95%, 55%, 0.4);
+    --shadow-primary-hover: 0 0 30px hsla(30, 95%, 55%, 0.7);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -66,19 +68,19 @@
     --card-foreground: 0 0% 96%;
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 96%;
-    --primary: 43 74% 49%;
+    --primary: 30 95% 55%;
     --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 96%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63%;
-    --accent: 343 100% 60%;
+    --accent: 4 80% 55%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 96%;
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 43 74% 49%;
+    --ring: 30 95% 55%;
   }
 }
 
@@ -99,19 +101,22 @@
 @layer components {
   .btn-gold {
     @apply inline-block px-10 py-4 font-extrabold uppercase rounded-full cursor-pointer border-none text-base;
-    background: var(--gradient-gold);
+    background: var(--gradient-brand);
     color: hsl(var(--primary-foreground));
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-primary);
     transition: all 0.3s ease;
   }
 
   .btn-gold:hover {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-gold-hover);
+    box-shadow: var(--shadow-primary-hover);
   }
 
   .text-gold {
-    color: hsl(var(--primary));
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .card-pillar {
@@ -128,7 +133,7 @@
 
   .feature-tag {
     @apply px-5 py-2.5 rounded-full font-semibold text-sm;
-    background: hsla(43, 74%, 49%, 0.1);
+    background: hsla(30, 95%, 55%, 0.1);
     color: hsl(var(--primary));
     border: 1px solid hsl(var(--primary));
   }
