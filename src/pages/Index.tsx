@@ -4,6 +4,7 @@ import AboutSection from "@/components/AboutSection";
 import PillarsSection from "@/components/PillarsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };
