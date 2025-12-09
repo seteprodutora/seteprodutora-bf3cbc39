@@ -21,6 +21,13 @@ const Footer = () => {
           >
             Política de Privacidade
           </Link>
+          <span className="text-muted-foreground/40">|</span>
+          <Link 
+            to="/termos-de-uso" 
+            className="text-muted-foreground/60 text-sm hover:text-primary transition-colors"
+          >
+            Termos de Uso
+          </Link>
         </div>
       </div>
     </footer>
