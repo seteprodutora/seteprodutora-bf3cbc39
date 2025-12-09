@@ -1,4 +1,5 @@
 import logo from "@/assets/logo.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -10,9 +11,17 @@ const Footer = () => {
         <p className="text-muted-foreground/60 text-sm">
           © 2024 7 Produtora. Todos os direitos reservados.
         </p>
-        <p className="text-muted-foreground/60 text-sm">
+        <p className="text-muted-foreground/60 text-sm mb-4">
           Transformando artistas independentes em profissionais de sucesso.
         </p>
+        <div className="flex justify-center gap-4">
+          <Link 
+            to="/politica-de-privacidade" 
+            className="text-muted-foreground/60 text-sm hover:text-primary transition-colors"
+          >
+            Política de Privacidade
+          </Link>
+        </div>
       </div>
     </footer>
   );
