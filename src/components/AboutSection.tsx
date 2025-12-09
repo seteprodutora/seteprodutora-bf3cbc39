@@ -20,7 +20,7 @@ const AboutSection = () => {
               Mais que uma produtora.<br />Uma gestora de sonhos.
             </h2>
             <p className="text-muted-foreground mb-5">
-              Muitos artistas independentes falham não por falta de talento, mas por exaustão. Tentar ser compositor, produtor, advogado e social media ao mesmo tempo é a receita para o fracasso.
+              Muitos artistas independentes não fracassam por falta de talento — fracassam por exaustão. Quando você tenta ser compositor, produtor, gestor, advogado e social media ao mesmo tempo, não sobra energia para ser artista.
             </p>
             <p className="text-muted-foreground mb-5">
               A <strong className="text-foreground">7 Produtora</strong> assume todas as pontas soltas da sua carreira. Do acompanhamento com psicólogo para manter sua mente blindada, até a negociação de contratos complexos.
