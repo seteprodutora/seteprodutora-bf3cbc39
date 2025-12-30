@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, TrendingUp, Users, Shield, Mic, Music, Headphones } from "lucide-react";
+import { ArrowLeft, Star, TrendingUp, Users, Shield, Mic, Music, Headphones, Guitar } from "lucide-react";
 import logo from "@/assets/logo.png";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -31,6 +31,7 @@ const services = [
   { icon: Mic, label: "Cantores" },
   { icon: Headphones, label: "DJs" },
   { icon: Music, label: "Músicos" },
+  { icon: Guitar, label: "Bandas" },
   { icon: Users, label: "Influenciadores" }
 ];
 
