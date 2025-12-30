@@ -49,6 +49,72 @@ export type Database = {
           },
         ]
       }
+      artist_submissions: {
+        Row: {
+          admin_notes: string | null
+          bio: string
+          category: string
+          city: string
+          created_at: string
+          email: string
+          experience_years: number | null
+          genres: string[] | null
+          id: string
+          instagram: string | null
+          name: string
+          phone: string
+          profile_image: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          spotify: string | null
+          state: string
+          status: string
+          youtube: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          bio: string
+          category: string
+          city: string
+          created_at?: string
+          email: string
+          experience_years?: number | null
+          genres?: string[] | null
+          id?: string
+          instagram?: string | null
+          name: string
+          phone: string
+          profile_image: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          spotify?: string | null
+          state: string
+          status?: string
+          youtube?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          bio?: string
+          category?: string
+          city?: string
+          created_at?: string
+          email?: string
+          experience_years?: number | null
+          genres?: string[] | null
+          id?: string
+          instagram?: string | null
+          name?: string
+          phone?: string
+          profile_image?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          spotify?: string | null
+          state?: string
+          status?: string
+          youtube?: string | null
+        }
+        Relationships: []
+      }
       artists: {
         Row: {
           bio: string | null
