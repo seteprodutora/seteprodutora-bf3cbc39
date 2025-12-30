@@ -1,29 +1,45 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, TrendingUp, Users, Shield, Mic, Music, Headphones, Guitar } from "lucide-react";
+import { ArrowLeft, Mic, Music, Headphones, Guitar, Users } from "lucide-react";
 import logo from "@/assets/logo.png";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
-const benefits = [
+const pillars = [
   {
-    icon: TrendingUp,
-    title: "Gestão de Carreira",
-    description: "Planejamento estratégico completo para alavancar sua trajetória artística"
+    number: '01',
+    title: 'Mentalidade',
+    description: 'Acompanhamento psicológico especializado para lidar com a pressão, bloqueios criativos e ansiedade de palco.'
   },
   {
-    icon: Users,
-    title: "Networking",
-    description: "Conexões com produtores, agências e marcas de renome no mercado"
+    number: '02',
+    title: 'Planejamento',
+    description: 'Mapa de carreira estratégico. Definimos onde você está, onde quer chegar e qual o caminho exato.'
   },
   {
-    icon: Shield,
-    title: "Suporte Jurídico",
-    description: "Assessoria em contratos, direitos autorais e proteção da sua imagem"
+    number: '03',
+    title: 'Criação',
+    description: 'Suporte na composição autoral, direção artística e refinamento do seu som único e identidade.'
   },
   {
-    icon: Star,
-    title: "Visibilidade",
-    description: "Exposição nas principais plataformas e eventos do segmento"
+    number: '04',
+    title: 'Produção',
+    description: 'Gravação, mixagem e masterização com qualidade de mercado. Transformamos demos em hits.'
+  },
+  {
+    number: '05',
+    title: 'Gestão',
+    description: 'Burocracia zero para você. Contratos, registros de obras, ecad, direitos autorais e gestão financeira.'
+  },
+  {
+    number: '06',
+    title: 'Branding',
+    description: 'Construção de marca forte. Identidade visual, posicionamento, fotos e discurso que conectam.'
+  },
+  {
+    number: '07',
+    title: 'Expansão',
+    description: 'Marketing & Vendas. Tráfego pago, redes sociais e negociação de shows para monetizar sua arte.',
+    highlight: true
   }
 ];
 
@@ -110,7 +126,7 @@ const SejaArtista = () => {
           </div>
         </section>
 
-        {/* Benefícios */}
+        {/* Os 7 Pilares */}
         <section className="py-20">
           <div className="container mx-auto px-5">
             <div className="text-center mb-16">
@@ -118,24 +134,27 @@ const SejaArtista = () => {
                 POR QUE A <span className="text-gold">7 PRODUTORA?</span>
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Oferecemos uma gestão completa para sua carreira artística
+                Nossa metodologia própria para transformar talento em legado
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {benefits.map((benefit, index) => (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {pillars.map((pillar) => (
                 <div 
-                  key={benefit.title}
-                  className="card-pillar flex gap-5"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  key={pillar.number}
+                  className={`card-pillar ${pillar.highlight ? 'border-primary' : ''}`}
+                  style={pillar.highlight ? { borderColor: 'hsl(var(--primary))' } : {}}
                 >
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <benefit.icon className="w-7 h-7 text-primary" />
+                  <div className="absolute top-0 right-5 text-6xl font-black text-foreground/5">
+                    {pillar.number}
                   </div>
-                  <div>
-                    <h3 className="text-xl font-oswald mb-2">{benefit.title}</h3>
-                    <p className="text-muted-foreground">{benefit.description}</p>
-                  </div>
+                  <h3 className="text-xl font-oswald text-gold mb-4 relative z-10">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground relative z-10">
+                    {pillar.highlight && <strong className="text-foreground">Marketing & Vendas. </strong>}
+                    {pillar.highlight ? pillar.description.replace('Marketing & Vendas. ', '') : pillar.description}
+                  </p>
                 </div>
               ))}
             </div>
