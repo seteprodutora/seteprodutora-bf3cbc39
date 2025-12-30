@@ -5,6 +5,7 @@ import logo from "@/assets/logo.png";
 const navLinks = [
   { href: "#sobre", label: "Sobre" },
   { href: "#pilares", label: "Os 7 Pilares" },
+  { href: "#casting", label: "Casting" },
   { href: "#contato", label: "Contato" },
 ];
 
@@ -15,7 +16,7 @@ const Header = () => {
     <header className="fixed top-0 w-full py-4 bg-background/95 backdrop-blur-md z-50 border-b border-border">
       <div className="container mx-auto px-5">
         <nav className="flex justify-between items-center">
-          <a href="#" className="flex items-center">
+          <a href="/" className="flex items-center">
             <img src={logo} alt="7 Produtora" className="h-14 md:h-16" />
           </a>
 
