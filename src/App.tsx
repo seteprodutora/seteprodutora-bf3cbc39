@@ -14,7 +14,9 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/admin/Dashboard";
 import ArtistsList from "./pages/admin/ArtistsList";
 import ArtistForm from "./pages/admin/ArtistForm";
+import ArtistSubmissions from "./pages/admin/ArtistSubmissions";
 import ArtistProfile from "./pages/ArtistProfile";
+import ArtistSubmission from "./pages/ArtistSubmission";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/seja-artista" element={<SejaArtista />} />
+            <Route path="/seja-artista/cadastro" element={<ArtistSubmission />} />
             <Route path="/casting" element={<Casting />} />
             <Route path="/politica-de-privacidade" element={<PrivacyPolicy />} />
             <Route path="/termos-de-uso" element={<TermsOfUse />} />
@@ -36,6 +39,7 @@ const App = () => (
             <Route path="/admin/artistas" element={<ArtistsList />} />
             <Route path="/admin/artistas/novo" element={<ArtistForm />} />
             <Route path="/admin/artistas/:id/editar" element={<ArtistForm />} />
+            <Route path="/admin/solicitacoes" element={<ArtistSubmissions />} />
             <Route path="/artistas/:slug" element={<ArtistProfile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

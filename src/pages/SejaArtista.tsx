@@ -93,15 +93,13 @@ const SejaArtista = () => {
               A 7 Produtora é especializada em gestão de carreiras artísticas. 
               Cuidamos de tudo para que você foque apenas em ser o artista.
             </p>
-            <a 
-              href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-gold animate-fade-in-up"
+            <Link 
+              to="/seja-artista/cadastro"
+              className="btn-gold animate-fade-in-up inline-block"
               style={{ animationDelay: '0.2s' }}
             >
               QUERO FAZER PARTE
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -170,14 +168,12 @@ const SejaArtista = () => {
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
               Entre em contato conosco e agende uma reunião para conhecer melhor nosso trabalho
             </p>
-            <a 
-              href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-gold"
+            <Link 
+              to="/seja-artista/cadastro"
+              className="btn-gold inline-block"
             >
-              AGENDAR REUNIÃO
-            </a>
+              CADASTRE-SE AGORA
+            </Link>
           </div>
         </section>
       </main>
