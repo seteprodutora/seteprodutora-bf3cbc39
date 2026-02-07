@@ -1,17 +1,73 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LayoutDashboard, Users, LogOut, Home, UserPlus } from "lucide-react";
+import { LayoutDashboard, Users, LogOut, Home, UserPlus, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 
 const AdminSidebar = () => {
   const { signOut } = useAuth();
   const location = useLocation();
+  const [pendingSubmissions, setPendingSubmissions] = useState(0);
+  const [pendingContacts, setPendingContacts] = useState(0);
+
+  useEffect(() => {
+    fetchCounts();
+
+    // Subscribe to realtime updates
+    const submissionsChannel = supabase
+      .channel("admin-submissions")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "artist_submissions" },
+        () => fetchCounts()
+      )
+      .subscribe();
+
+    const contactsChannel = supabase
+      .channel("admin-contacts")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "contact_requests" },
+        () => fetchCounts()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(submissionsChannel);
+      supabase.removeChannel(contactsChannel);
+    };
+  }, []);
+
+  const fetchCounts = async () => {
+    // Fetch pending submissions count
+    const { count: submissionsCount } = await supabase
+      .from("artist_submissions")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending");
+
+    if (submissionsCount !== null) {
+      setPendingSubmissions(submissionsCount);
+    }
+
+    // Fetch pending contacts count
+    const { count: contactsCount } = await supabase
+      .from("contact_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending");
+
+    if (contactsCount !== null) {
+      setPendingContacts(contactsCount);
+    }
+  };
 
   const menuItems = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/artistas", label: "Artistas", icon: Users },
-    { href: "/admin/solicitacoes", label: "Solicitações", icon: UserPlus },
+    { href: "/admin", label: "Dashboard", icon: LayoutDashboard, badge: 0 },
+    { href: "/admin/artistas", label: "Artistas", icon: Users, badge: 0 },
+    { href: "/admin/solicitacoes", label: "Solicitações", icon: UserPlus, badge: pendingSubmissions },
+    { href: "/admin/contatos", label: "Contatos", icon: MessageSquare, badge: pendingContacts },
   ];
 
   const isActive = (path: string) => {
@@ -36,14 +92,24 @@ const AdminSidebar = () => {
               <li key={item.href}>
                 <Link
                   to={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
                     isActive(item.href)
                       ? "bg-primary/20 text-primary"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
                 >
-                  <Icon size={20} />
-                  <span>{item.label}</span>
+                  <div className="flex items-center gap-3">
+                    <Icon size={20} />
+                    <span>{item.label}</span>
+                  </div>
+                  {item.badge > 0 && (
+                    <Badge 
+                      variant="destructive" 
+                      className="h-5 min-w-5 flex items-center justify-center text-xs"
+                    >
+                      {item.badge}
+                    </Badge>
+                  )}
                 </Link>
               </li>
             );

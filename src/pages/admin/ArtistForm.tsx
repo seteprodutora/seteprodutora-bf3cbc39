@@ -7,6 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload, X, Plus, ArrowLeft } from "lucide-react";
@@ -19,21 +27,60 @@ interface ArtistPhoto {
   order_index: number;
 }
 
+const categories = [
+  { value: "cantor", label: "Cantor(a)" },
+  { value: "dj", label: "DJ" },
+  { value: "musico", label: "Músico" },
+  { value: "banda", label: "Banda" },
+  { value: "influenciador", label: "Influenciador(a)" },
+];
+
+const brazilianStates = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+  "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+  "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+];
+
+const commonGenres = [
+  "Axé", "Blues", "Bossa Nova", "Country", "Eletrônica", "Forró",
+  "Funk", "Gospel", "Hip Hop", "Jazz", "MPB", "Pagode", "Pop",
+  "R&B", "Rap", "Reggae", "Rock", "Samba", "Sertanejo", "Soul"
+];
+
 const ArtistForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const isEditing = !!id;
 
+  // Basic info
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [isVisible, setIsVisible] = useState(true);
+  
+  // New fields
+  const [category, setCategory] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [experienceYears, setExperienceYears] = useState<string>("");
+  const [genres, setGenres] = useState<string[]>([]);
+  const [instagram, setInstagram] = useState("");
+  const [youtube, setYoutube] = useState("");
+  const [spotify, setSpotify] = useState("");
+  const [youtubeVideoUrl, setYoutubeVideoUrl] = useState("");
+  
+  // Gallery
   const [photos, setPhotos] = useState<ArtistPhoto[]>([]);
+  
+  // Loading states
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [uploadingProfile, setUploadingProfile] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
+  
+  // Genre input
+  const [newGenre, setNewGenre] = useState("");
 
   useEffect(() => {
     if (isEditing) {
@@ -63,6 +110,15 @@ const ArtistForm = () => {
     setBio(artist.bio || "");
     setProfileImage(artist.profile_image || "");
     setIsVisible(artist.is_visible);
+    setCategory(artist.category || "");
+    setCity(artist.city || "");
+    setState(artist.state || "");
+    setExperienceYears(artist.experience_years?.toString() || "");
+    setGenres(artist.genres || []);
+    setInstagram(artist.instagram || "");
+    setYoutube(artist.youtube || "");
+    setSpotify(artist.spotify || "");
+    setYoutubeVideoUrl(artist.youtube_video_url || "");
 
     const { data: artistPhotos } = await supabase
       .from("artist_photos")
@@ -150,6 +206,18 @@ const ArtistForm = () => {
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
+  const addGenre = (genre: string) => {
+    const trimmedGenre = genre.trim();
+    if (trimmedGenre && !genres.includes(trimmedGenre)) {
+      setGenres([...genres, trimmedGenre]);
+    }
+    setNewGenre("");
+  };
+
+  const removeGenre = (genre: string) => {
+    setGenres(genres.filter((g) => g !== genre));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -171,6 +239,15 @@ const ArtistForm = () => {
       bio: bio || null,
       profile_image: profileImage || null,
       is_visible: isVisible,
+      category: category || null,
+      city: city || null,
+      state: state || null,
+      experience_years: experienceYears ? parseInt(experienceYears) : null,
+      genres: genres.length > 0 ? genres : null,
+      instagram: instagram || null,
+      youtube: youtube || null,
+      spotify: spotify || null,
+      youtube_video_url: youtubeVideoUrl || null,
     };
 
     try {
@@ -256,20 +333,38 @@ const ArtistForm = () => {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Basic Info */}
           <Card className="bg-card border-border">
             <CardHeader>
               <CardTitle>Informações Básicas</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <Label htmlFor="name">Nome Artístico *</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Ex: João Silva"
-                  className="bg-secondary border-border mt-2"
-                />
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="name">Nome Artístico *</Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Ex: João Silva"
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+                <div>
+                  <Label>Categoria</Label>
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="bg-secondary border-border mt-2">
+                      <SelectValue placeholder="Selecione..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <div>
@@ -299,6 +394,174 @@ const ArtistForm = () => {
             </CardContent>
           </Card>
 
+          {/* Location & Experience */}
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle>Localização e Experiência</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input
+                    id="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="Ex: São Paulo"
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+                <div>
+                  <Label>Estado</Label>
+                  <Select value={state} onValueChange={setState}>
+                    <SelectTrigger className="bg-secondary border-border mt-2">
+                      <SelectValue placeholder="UF" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brazilianStates.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="experience">Anos de Experiência</Label>
+                  <Input
+                    id="experience"
+                    type="number"
+                    min="0"
+                    value={experienceYears}
+                    onChange={(e) => setExperienceYears(e.target.value)}
+                    placeholder="Ex: 5"
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Genres */}
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle>Gêneros Musicais</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {commonGenres.map((genre) => (
+                  <button
+                    key={genre}
+                    type="button"
+                    onClick={() =>
+                      genres.includes(genre) ? removeGenre(genre) : addGenre(genre)
+                    }
+                    className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                      genres.includes(genre)
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-secondary text-muted-foreground border-border hover:border-primary"
+                    }`}
+                  >
+                    {genre}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Adicionar gênero personalizado..."
+                  value={newGenre}
+                  onChange={(e) => setNewGenre(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addGenre(newGenre);
+                    }
+                  }}
+                  className="bg-secondary border-border"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => addGenre(newGenre)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {genres.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <span className="text-sm text-muted-foreground mr-2">Selecionados:</span>
+                  {genres.map((genre) => (
+                    <Badge
+                      key={genre}
+                      variant="secondary"
+                      className="cursor-pointer"
+                      onClick={() => removeGenre(genre)}
+                    >
+                      {genre}
+                      <X className="h-3 w-3 ml-1" />
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Social Links */}
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle>Redes Sociais</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="instagram">Instagram</Label>
+                  <Input
+                    id="instagram"
+                    value={instagram}
+                    onChange={(e) => setInstagram(e.target.value)}
+                    placeholder="@usuario"
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="spotify">Spotify</Label>
+                  <Input
+                    id="spotify"
+                    value={spotify}
+                    onChange={(e) => setSpotify(e.target.value)}
+                    placeholder="https://open.spotify.com/artist/..."
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="youtube">Canal YouTube</Label>
+                  <Input
+                    id="youtube"
+                    value={youtube}
+                    onChange={(e) => setYoutube(e.target.value)}
+                    placeholder="https://youtube.com/@canal"
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="youtubeVideo">Vídeo em Destaque</Label>
+                  <Input
+                    id="youtubeVideo"
+                    value={youtubeVideoUrl}
+                    onChange={(e) => setYoutubeVideoUrl(e.target.value)}
+                    placeholder="https://youtube.com/watch?v=..."
+                    className="bg-secondary border-border mt-2"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Profile Image */}
           <Card className="bg-card border-border">
             <CardHeader>
               <CardTitle>Foto de Perfil</CardTitle>
@@ -343,6 +606,7 @@ const ArtistForm = () => {
             </CardContent>
           </Card>
 
+          {/* Gallery */}
           <Card className="bg-card border-border">
             <CardHeader>
               <CardTitle>Galeria de Fotos</CardTitle>
@@ -388,6 +652,7 @@ const ArtistForm = () => {
             </CardContent>
           </Card>
 
+          {/* Actions */}
           <div className="flex gap-4">
             <Button type="submit" className="btn-gold" disabled={isSaving}>
               {isSaving ? (

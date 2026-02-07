@@ -5,7 +5,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Loader2, 
+  ArrowLeft, 
+  X, 
+  MapPin, 
+  Calendar,
+  Instagram,
+  Youtube,
+  Music
+} from "lucide-react";
 
 interface Artist {
   id: string;
@@ -13,6 +23,15 @@ interface Artist {
   slug: string;
   bio: string | null;
   profile_image: string | null;
+  category: string | null;
+  city: string | null;
+  state: string | null;
+  experience_years: number | null;
+  genres: string[] | null;
+  instagram: string | null;
+  youtube: string | null;
+  spotify: string | null;
+  youtube_video_url: string | null;
 }
 
 interface ArtistPhoto {
@@ -20,6 +39,14 @@ interface ArtistPhoto {
   image_url: string;
   caption: string | null;
 }
+
+const categoryLabels: Record<string, string> = {
+  cantor: "Cantor(a)",
+  dj: "DJ",
+  musico: "Músico",
+  banda: "Banda",
+  influenciador: "Influenciador(a)",
+};
 
 const ArtistProfile = () => {
   const { slug } = useParams();
@@ -59,6 +86,14 @@ const ArtistProfile = () => {
     fetchArtist();
   }, [slug]);
 
+  const getYouTubeEmbedUrl = (url: string) => {
+    const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    if (videoIdMatch) {
+      return `https://www.youtube.com/embed/${videoIdMatch[1]}`;
+    }
+    return null;
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -79,7 +114,7 @@ const ArtistProfile = () => {
             <p className="text-muted-foreground mb-8">
               O artista que você procura não existe ou não está disponível.
             </p>
-            <Link to="/#casting">
+            <Link to="/casting">
               <Button className="btn-gold">Ver Casting</Button>
             </Link>
           </div>
@@ -92,6 +127,10 @@ const ArtistProfile = () => {
   const whatsappMessage = `Olá! Gostaria de saber mais sobre o artista ${artist.name}.`;
   const whatsappUrl = `https://wa.me/5511964360431?text=${encodeURIComponent(whatsappMessage)}`;
 
+  const youtubeEmbedUrl = artist.youtube_video_url 
+    ? getYouTubeEmbedUrl(artist.youtube_video_url) 
+    : null;
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -99,7 +138,7 @@ const ArtistProfile = () => {
         <div className="container mx-auto px-5">
           {/* Back link */}
           <Link
-            to="/#casting"
+            to="/casting"
             className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -126,10 +165,45 @@ const ArtistProfile = () => {
 
             {/* Info */}
             <div className="flex flex-col justify-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-gold mb-6">
+              {/* Category Badge */}
+              {artist.category && (
+                <Badge className="w-fit mb-4 bg-primary/10 text-primary border-primary">
+                  {categoryLabels[artist.category] || artist.category}
+                </Badge>
+              )}
+
+              <h1 className="text-4xl md:text-5xl font-bold text-gold mb-4">
                 {artist.name}
               </h1>
 
+              {/* Location & Experience */}
+              <div className="flex flex-wrap gap-4 text-muted-foreground mb-6">
+                {artist.city && artist.state && (
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-4 h-4" />
+                    {artist.city}, {artist.state}
+                  </span>
+                )}
+                {artist.experience_years && (
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {artist.experience_years} anos de experiência
+                  </span>
+                )}
+              </div>
+
+              {/* Genres */}
+              {artist.genres && artist.genres.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {artist.genres.map((genre) => (
+                    <Badge key={genre} variant="outline" className="text-sm">
+                      {genre}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* Bio */}
               {artist.bio && (
                 <div className="prose prose-invert max-w-none mb-8">
                   <p className="text-foreground/80 text-lg leading-relaxed whitespace-pre-wrap">
@@ -138,13 +212,73 @@ const ArtistProfile = () => {
                 </div>
               )}
 
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <Button className="btn-gold">
-                  Entrar em Contato
-                </Button>
-              </a>
+              {/* Social Links */}
+              {(artist.instagram || artist.youtube || artist.spotify) && (
+                <div className="flex flex-wrap gap-4 mb-8">
+                  {artist.instagram && (
+                    <a
+                      href={`https://instagram.com/${artist.instagram.replace('@', '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-border hover:border-primary transition-colors"
+                    >
+                      <Instagram className="w-5 h-5 text-pink-500" />
+                      <span className="text-sm">{artist.instagram}</span>
+                    </a>
+                  )}
+                  {artist.youtube && (
+                    <a
+                      href={artist.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-border hover:border-primary transition-colors"
+                    >
+                      <Youtube className="w-5 h-5 text-red-500" />
+                      <span className="text-sm">YouTube</span>
+                    </a>
+                  )}
+                  {artist.spotify && (
+                    <a
+                      href={artist.spotify}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-border hover:border-primary transition-colors"
+                    >
+                      <Music className="w-5 h-5 text-green-500" />
+                      <span className="text-sm">Spotify</span>
+                    </a>
+                  )}
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-4">
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <Button className="btn-gold">Entrar em Contato</Button>
+                </a>
+                <Link to="/contato">
+                  <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                    Solicitar Orçamento
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
+
+          {/* YouTube Video */}
+          {youtubeEmbedUrl && (
+            <div className="mt-16">
+              <h2 className="text-3xl font-bold text-foreground mb-8">Vídeo</h2>
+              <div className="aspect-video rounded-2xl overflow-hidden bg-card">
+                <iframe
+                  src={youtubeEmbedUrl}
+                  title="YouTube video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
+          )}
 
           {/* Gallery */}
           {photos.length > 0 && (

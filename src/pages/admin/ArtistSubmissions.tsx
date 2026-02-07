@@ -126,7 +126,7 @@ const ArtistSubmissions = () => {
     try {
       const slug = generateSlug(selectedSubmission.name);
 
-      // Create artist from submission
+      // Create artist from submission with all fields
       const { data: artist, error: artistError } = await supabase
         .from('artists')
         .insert({
@@ -135,6 +135,14 @@ const ArtistSubmissions = () => {
           bio: selectedSubmission.bio,
           profile_image: selectedSubmission.profile_image,
           is_visible: true,
+          category: selectedSubmission.category,
+          city: selectedSubmission.city,
+          state: selectedSubmission.state,
+          experience_years: selectedSubmission.experience_years,
+          genres: selectedSubmission.genres,
+          instagram: selectedSubmission.instagram,
+          youtube: selectedSubmission.youtube,
+          spotify: selectedSubmission.spotify,
         })
         .select()
         .single();
