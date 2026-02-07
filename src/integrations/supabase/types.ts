@@ -118,33 +118,146 @@ export type Database = {
       artists: {
         Row: {
           bio: string | null
+          category: string | null
+          city: string | null
           created_at: string
+          experience_years: number | null
+          genres: string[] | null
           id: string
+          instagram: string | null
           is_visible: boolean
           name: string
           profile_image: string | null
           slug: string
+          spotify: string | null
+          state: string | null
           updated_at: string
+          youtube: string | null
+          youtube_video_url: string | null
         }
         Insert: {
           bio?: string | null
+          category?: string | null
+          city?: string | null
           created_at?: string
+          experience_years?: number | null
+          genres?: string[] | null
           id?: string
+          instagram?: string | null
           is_visible?: boolean
           name: string
           profile_image?: string | null
           slug: string
+          spotify?: string | null
+          state?: string | null
           updated_at?: string
+          youtube?: string | null
+          youtube_video_url?: string | null
         }
         Update: {
           bio?: string | null
+          category?: string | null
+          city?: string | null
           created_at?: string
+          experience_years?: number | null
+          genres?: string[] | null
           id?: string
+          instagram?: string | null
           is_visible?: boolean
           name?: string
           profile_image?: string | null
           slug?: string
+          spotify?: string | null
+          state?: string | null
           updated_at?: string
+          youtube?: string | null
+          youtube_video_url?: string | null
+        }
+        Relationships: []
+      }
+      contact_requests: {
+        Row: {
+          admin_notes: string | null
+          artist_id: string | null
+          company: string | null
+          created_at: string
+          email: string
+          event_date: string | null
+          event_type: string | null
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          status: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          artist_id?: string | null
+          company?: string | null
+          created_at?: string
+          email: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          status?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          artist_id?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      testimonials: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          is_visible: boolean
+          name: string
+          order_index: number
+          role: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          name: string
+          order_index?: number
+          role?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          name?: string
+          order_index?: number
+          role?: string | null
         }
         Relationships: []
       }
