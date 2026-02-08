@@ -1,54 +1,92 @@
 
-## Plano: Atualizar Página "Sobre" com Informações Reais
+## Plano: Adicionar Lightbox nos Cards de Serviços
 
-Vou ajustar a página `/sobre` para refletir a realidade atual da 7 Produtora, removendo estatísticas infladas e focando nos serviços oferecidos.
-
----
-
-### Alterações Planejadas
-
-**1. Remover seção de estatísticas numéricas**
-A seção atual mostra "50+ Artistas", "200+ Shows" e "5+ Anos" que não correspondem à realidade. Vou substituí-la por uma apresentação dos pilares de serviço.
-
-**2. Nova seção: "O Que Entregamos"**
-Substituir as estatísticas por cards destacando os 7 pilares de serviço:
-- Psicologia (suporte mental)
-- Jurídico (contratos e direitos)
-- Produção (gravação e mixagem)
-- Branding (identidade visual)
-- Marketing (tráfego e redes)
-- Vendas (negociação de shows)
-- Planejamento (estratégia de carreira)
-
-**3. Atualizar texto da "Nossa História"**
-- Remover "dezenas de artistas em todo o Brasil" 
-- Ajustar para linguagem de empresa nova no mercado
-- Manter o posicionamento de empresa jovem com metodologia sólida
+Vou implementar um lightbox (dialog) que abre ao clicar em cada card da seção "O Que Entregamos", exibindo uma descrição expandida focada em persuasão, autoridade e conexão.
 
 ---
 
-### Arquivo a Modificar
+### Estrutura da Solução
+
+**1. Componente Dialog (Lightbox)**
+Usar o componente `Dialog` do Radix UI que já está instalado no projeto para criar o lightbox.
+
+**2. Estado para controlar qual serviço está aberto**
+Adicionar um estado `useState` para armazenar o serviço selecionado.
+
+**3. Conteúdo expandido para cada serviço**
+Criar textos persuasivos e objetivos para cada um dos 7 pilares:
+
+| Serviço | Foco do Texto |
+|---------|---------------|
+| Psicologia | Saúde mental como base do sucesso, blindagem emocional |
+| Jurídico | Proteção e segurança para focar na arte |
+| Produção | Qualidade profissional que compete no mercado |
+| Branding | Imagem que gera conexão e reconhecimento |
+| Marketing | Alcance estratégico e visibilidade real |
+| Vendas | Monetização e negociações profissionais |
+| Planejamento | Clareza de caminho e metas alcançáveis |
+
+---
+
+### Alterações no Arquivo
 
 **`src/pages/About.tsx`**
-- Remover array `stats` com números inflados
-- Remover seção que renderiza estatísticas numéricas
-- Criar nova seção "O Que Entregamos" com os serviços
-- Atualizar parágrafo da história para refletir 1 ano de mercado
+
+1. **Importar componentes do Dialog:**
+```typescript
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+```
+
+2. **Expandir o array `services` com campo `fullDescription`:**
+Cada serviço terá um texto mais longo (2-3 parágrafos) focado em:
+- Conexão emocional com a dor do artista
+- Autoridade da 7 Produtora na solução
+- Rapport através de linguagem acessível
+
+3. **Adicionar estado para serviço selecionado:**
+```typescript
+const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+```
+
+4. **Tornar os cards clicáveis:**
+Adicionar `onClick` e `cursor-pointer` nos cards.
+
+5. **Renderizar o Dialog:**
+Exibir o conteúdo completo quando um serviço estiver selecionado.
 
 ---
 
-### Resultado Visual Esperado
+### Textos Persuasivos Planejados
 
-**Antes:**
-```
-50+ Artistas | 200+ Shows | 5+ Anos | 360° Gestão
-```
+**Psicologia:**
+"A pressão do mercado, os bloqueios criativos e a ansiedade de palco podem destruir carreiras promissoras. Oferecemos acompanhamento psicológico especializado para artistas, ajudando você a manter a mente blindada enquanto conquista o sucesso. Artistas emocionalmente preparados performam melhor e duram mais no mercado."
 
-**Depois:**
-```
-[Ícone] Psicologia    [Ícone] Jurídico     [Ícone] Produção
-[Ícone] Branding      [Ícone] Marketing    [Ícone] Vendas
-                 [Ícone] Planejamento
-```
+**Jurídico:**
+"Contratos mal feitos, direitos autorais não registrados e burocracias do ECAD são armadilhas que podem custar anos de trabalho. Nossa equipe jurídica cuida de toda a documentação, garantindo que você esteja 100% protegido para focar apenas na sua arte."
 
-Cada card terá ícone + título + breve descrição do serviço.
+**Produção:**
+"Seu talento merece uma produção à altura. Oferecemos gravação, mixagem e masterização com qualidade de mercado, transformando suas ideias em músicas que competem de igual para igual com grandes artistas."
+
+**Branding:**
+"No mercado atual, imagem é tão importante quanto talento. Construímos sua identidade visual, posicionamento e discurso de forma estratégica, criando uma marca que gera conexão instantânea com seu público."
+
+**Marketing:**
+"Ter música boa não basta se ninguém ouve. Criamos estratégias de tráfego pago, gestão de redes sociais e campanhas de alcance que colocam sua arte na frente das pessoas certas, no momento certo."
+
+**Vendas:**
+"Shows, eventos e parcerias são onde a música vira renda. Negociamos por você, garantindo as melhores condições e contratos justos. Enquanto você faz arte, nós fazemos dinheiro para você."
+
+**Planejamento:**
+"Sem direção, até o maior talento se perde. Criamos um mapa estratégico da sua carreira com metas claras, prazos definidos e etapas concretas. Você saberá exatamente onde está, para onde vai e como chegar lá."
+
+---
+
+### Resultado Visual
+
+Ao clicar em qualquer card:
+- Abre um modal centralizado com overlay escuro
+- Exibe o ícone do serviço, título em destaque
+- Texto expandido persuasivo (2-3 parágrafos)
+- Botão para fechar (X) no canto superior direito
+
+Os cards terão efeito hover melhorado para indicar que são clicáveis.
