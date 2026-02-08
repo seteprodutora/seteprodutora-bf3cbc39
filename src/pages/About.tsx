@@ -4,21 +4,27 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Button } from "@/components/ui/button";
 import { 
-  Users, 
-  Music, 
-  Calendar, 
-  Award,
+  Brain,
+  Scale,
+  Music,
+  Palette,
+  Megaphone,
+  HandshakeIcon,
+  Map,
   Target,
   Heart,
   Lightbulb,
   ArrowRight
 } from "lucide-react";
 
-const stats = [
-  { icon: Users, value: "50+", label: "Artistas Gerenciados" },
-  { icon: Music, value: "200+", label: "Shows Realizados" },
-  { icon: Calendar, value: "5+", label: "Anos de Experiência" },
-  { icon: Award, value: "360°", label: "Gestão Completa" },
+const services = [
+  { icon: Brain, title: "Psicologia", description: "Acompanhamento para lidar com pressão, bloqueios criativos e ansiedade." },
+  { icon: Scale, title: "Jurídico", description: "Contratos, direitos autorais, ECAD e proteção legal completa." },
+  { icon: Music, title: "Produção", description: "Gravação, mixagem e masterização com qualidade profissional." },
+  { icon: Palette, title: "Branding", description: "Identidade visual, posicionamento e imagem que conecta." },
+  { icon: Megaphone, title: "Marketing", description: "Tráfego pago, redes sociais e estratégias de alcance." },
+  { icon: HandshakeIcon, title: "Vendas", description: "Negociação de shows, eventos e parcerias comerciais." },
+  { icon: Map, title: "Planejamento", description: "Mapa estratégico de carreira com metas e prazos definidos." },
 ];
 
 const values = [
@@ -60,25 +66,26 @@ const About = () => {
           </div>
         </section>
 
-        {/* Stats */}
+        {/* O Que Entregamos */}
         <section className="py-16 border-b border-border">
           <div className="container mx-auto px-5">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((stat, index) => {
-                const Icon = stat.icon;
+            <h2 className="text-2xl md:text-3xl font-oswald text-center mb-10">
+              O QUE <span className="text-gold">ENTREGAMOS</span>
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {services.map((service, index) => {
+                const Icon = service.icon;
                 return (
                   <div 
-                    key={stat.label} 
-                    className="text-center animate-fade-in-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    key={service.title} 
+                    className="bg-card rounded-xl p-5 border border-border text-center animate-fade-in-up hover:border-primary/50 transition-colors"
+                    style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <Icon className="w-8 h-8 mx-auto mb-3 text-primary" />
-                    <div className="text-3xl md:text-4xl font-oswald text-gold mb-1">
-                      {stat.value}
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-6 h-6 text-primary" />
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {stat.label}
-                    </div>
+                    <h3 className="font-oswald text-gold mb-2">{service.title}</h3>
+                    <p className="text-xs text-muted-foreground">{service.description}</p>
                   </div>
                 );
               })}
@@ -102,15 +109,15 @@ const About = () => {
                     não sobra energia para ser artista.
                   </p>
                   <p>
-                    Fundada por profissionais com experiência no mercado musical, nossa 
-                    empresa foi criada para ser a estrutura que faltava para artistas 
-                    independentes. Uma equipe completa, trabalhando nos bastidores, para 
-                    que o talento possa brilhar no palco.
+                    Com uma metodologia própria baseada em 7 pilares essenciais, criamos 
+                    a estrutura que faltava para artistas independentes. Uma equipe 
+                    completa, trabalhando nos bastidores, para que o talento possa 
+                    brilhar no palco.
                   </p>
                   <p>
-                    Hoje, gerenciamos dezenas de artistas em todo o Brasil, cuidando de 
-                    suas carreiras de forma integral: da estratégia de lançamento ao 
-                    contrato do próximo show, da identidade visual ao suporte psicológico.
+                    Nossa missão é cuidar de cada detalhe da sua carreira: da estratégia 
+                    de lançamento ao contrato do próximo show, da identidade visual ao 
+                    suporte psicológico.
                   </p>
                 </div>
               </div>
