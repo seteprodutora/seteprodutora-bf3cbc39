@@ -1,8 +1,16 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Button } from "@/components/ui/button";
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { 
   Brain,
   Scale,
@@ -18,13 +26,48 @@ import {
 } from "lucide-react";
 
 const services = [
-  { icon: Brain, title: "Psicologia", description: "Acompanhamento para lidar com pressão, bloqueios criativos e ansiedade." },
-  { icon: Scale, title: "Jurídico", description: "Contratos, direitos autorais, ECAD e proteção legal completa." },
-  { icon: Music, title: "Produção", description: "Gravação, mixagem e masterização com qualidade profissional." },
-  { icon: Palette, title: "Branding", description: "Identidade visual, posicionamento e imagem que conecta." },
-  { icon: Megaphone, title: "Marketing", description: "Tráfego pago, redes sociais e estratégias de alcance." },
-  { icon: HandshakeIcon, title: "Vendas", description: "Negociação de shows, eventos e parcerias comerciais." },
-  { icon: Map, title: "Planejamento", description: "Mapa estratégico de carreira com metas e prazos definidos." },
+  { 
+    icon: Brain, 
+    title: "Psicologia", 
+    description: "Acompanhamento para lidar com pressão, bloqueios criativos e ansiedade.",
+    fullDescription: "A pressão do mercado, os bloqueios criativos e a ansiedade de palco podem destruir carreiras promissoras. Oferecemos acompanhamento psicológico especializado para artistas, ajudando você a manter a mente blindada enquanto conquista o sucesso. Artistas emocionalmente preparados performam melhor e duram mais no mercado."
+  },
+  { 
+    icon: Scale, 
+    title: "Jurídico", 
+    description: "Contratos, direitos autorais, ECAD e proteção legal completa.",
+    fullDescription: "Contratos mal feitos, direitos autorais não registrados e burocracias do ECAD são armadilhas que podem custar anos de trabalho. Nossa equipe jurídica cuida de toda a documentação, garantindo que você esteja 100% protegido para focar apenas na sua arte."
+  },
+  { 
+    icon: Music, 
+    title: "Produção", 
+    description: "Gravação, mixagem e masterização com qualidade profissional.",
+    fullDescription: "Seu talento merece uma produção à altura. Oferecemos gravação, mixagem e masterização com qualidade de mercado, transformando suas ideias em músicas que competem de igual para igual com grandes artistas."
+  },
+  { 
+    icon: Palette, 
+    title: "Branding", 
+    description: "Identidade visual, posicionamento e imagem que conecta.",
+    fullDescription: "No mercado atual, imagem é tão importante quanto talento. Construímos sua identidade visual, posicionamento e discurso de forma estratégica, criando uma marca que gera conexão instantânea com seu público."
+  },
+  { 
+    icon: Megaphone, 
+    title: "Marketing", 
+    description: "Tráfego pago, redes sociais e estratégias de alcance.",
+    fullDescription: "Ter música boa não basta se ninguém ouve. Criamos estratégias de tráfego pago, gestão de redes sociais e campanhas de alcance que colocam sua arte na frente das pessoas certas, no momento certo."
+  },
+  { 
+    icon: HandshakeIcon, 
+    title: "Vendas", 
+    description: "Negociação de shows, eventos e parcerias comerciais.",
+    fullDescription: "Shows, eventos e parcerias são onde a música vira renda. Negociamos por você, garantindo as melhores condições e contratos justos. Enquanto você faz arte, nós fazemos dinheiro para você."
+  },
+  { 
+    icon: Map, 
+    title: "Planejamento", 
+    description: "Mapa estratégico de carreira com metas e prazos definidos.",
+    fullDescription: "Sem direção, até o maior talento se perde. Criamos um mapa estratégico da sua carreira com metas claras, prazos definidos e etapas concretas. Você saberá exatamente onde está, para onde vai e como chegar lá."
+  },
 ];
 
 const values = [
@@ -46,6 +89,8 @@ const values = [
 ];
 
 const About = () => {
+  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -78,10 +123,11 @@ const About = () => {
                 return (
                   <div 
                     key={service.title} 
-                    className="bg-card rounded-xl p-5 border border-border text-center animate-fade-in-up hover:border-primary/50 transition-colors"
+                    className="bg-card rounded-xl p-5 border border-border text-center animate-fade-in-up hover:border-primary/50 hover:scale-105 transition-all duration-300 cursor-pointer group"
                     style={{ animationDelay: `${index * 0.05}s` }}
+                    onClick={() => setSelectedService(service)}
                   >
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                       <Icon className="w-6 h-6 text-primary" />
                     </div>
                     <h3 className="font-oswald text-gold mb-2">{service.title}</h3>
@@ -92,6 +138,27 @@ const About = () => {
             </div>
           </div>
         </section>
+
+        {/* Dialog/Lightbox para Serviços */}
+        <Dialog open={!!selectedService} onOpenChange={() => setSelectedService(null)}>
+          <DialogContent className="sm:max-w-[500px] bg-card border-border">
+            <DialogHeader>
+              <div className="flex items-center gap-4 mb-4">
+                {selectedService && (
+                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                    <selectedService.icon className="w-7 h-7 text-primary" />
+                  </div>
+                )}
+                <DialogTitle className="text-2xl font-oswald text-gold">
+                  {selectedService?.title}
+                </DialogTitle>
+              </div>
+              <DialogDescription className="text-base leading-relaxed text-muted-foreground">
+                {selectedService?.fullDescription}
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
 
         {/* Nossa História */}
         <section className="py-20">
