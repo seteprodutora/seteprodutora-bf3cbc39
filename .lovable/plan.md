@@ -1,92 +1,82 @@
 
-## Plano: Adicionar Lightbox nos Cards de Serviços
+## Plano: Notificação por Email para Novas Mensagens de Contato
 
-Vou implementar um lightbox (dialog) que abre ao clicar em cada card da seção "O Que Entregamos", exibindo uma descrição expandida focada em persuasão, autoridade e conexão.
-
----
-
-### Estrutura da Solução
-
-**1. Componente Dialog (Lightbox)**
-Usar o componente `Dialog` do Radix UI que já está instalado no projeto para criar o lightbox.
-
-**2. Estado para controlar qual serviço está aberto**
-Adicionar um estado `useState` para armazenar o serviço selecionado.
-
-**3. Conteúdo expandido para cada serviço**
-Criar textos persuasivos e objetivos para cada um dos 7 pilares:
-
-| Serviço | Foco do Texto |
-|---------|---------------|
-| Psicologia | Saúde mental como base do sucesso, blindagem emocional |
-| Jurídico | Proteção e segurança para focar na arte |
-| Produção | Qualidade profissional que compete no mercado |
-| Branding | Imagem que gera conexão e reconhecimento |
-| Marketing | Alcance estratégico e visibilidade real |
-| Vendas | Monetização e negociações profissionais |
-| Planejamento | Clareza de caminho e metas alcançáveis |
+Toda vez que alguém preencher o formulário de contato, o admin receberá um email com os detalhes da mensagem.
 
 ---
 
-### Alterações no Arquivo
+### Como Vai Funcionar
 
-**`src/pages/About.tsx`**
-
-1. **Importar componentes do Dialog:**
-```typescript
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+```text
+[Usuário preenche formulário]
+         ↓
+[Dados salvos no banco]
+         ↓
+[Formulário chama função backend]
+         ↓
+[Função envia email via Resend]
+         ↓
+[Admin recebe email com detalhes]
 ```
 
-2. **Expandir o array `services` com campo `fullDescription`:**
-Cada serviço terá um texto mais longo (2-3 parágrafos) focado em:
-- Conexão emocional com a dor do artista
-- Autoridade da 7 Produtora na solução
-- Rapport através de linguagem acessível
+---
 
-3. **Adicionar estado para serviço selecionado:**
-```typescript
-const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+### Tecnologia de Email
+
+Será usado o **Resend** — serviço de envio de emails moderno e confiável. O plano gratuito permite até 3.000 emails/mês, mais que suficiente para este caso.
+
+**Será necessário:**
+1. Criar uma conta gratuita em [resend.com](https://resend.com)
+2. Gerar uma API Key
+3. Informar a API Key para configurar o sistema
+
+---
+
+### Alterações Técnicas
+
+**1. Backend Function (nova): `send-contact-notification`**
+
+Uma função backend que recebe os dados do formulário e envia o email para o admin. O email terá:
+- Nome e empresa do contato
+- Email e telefone
+- Tipo e data do evento
+- Mensagem completa
+- Link direto para o painel admin
+
+**2. `src/pages/Contact.tsx`**
+
+Após salvar com sucesso no banco, o formulário chamará a nova função backend para disparar o email.
+
+---
+
+### Conteúdo do Email
+
+```
+Assunto: 🔔 Nova mensagem de contato - [Nome do contato]
+
+De: [Nome] ([Empresa se tiver])
+Email: email@exemplo.com
+Telefone: (11) 99999-9999
+
+Tipo de Evento: Casamento
+Data do Evento: 15/06/2026
+
+Mensagem:
+"Olá, gostaria de contratar um artista para..."
+
+→ Ver no painel admin
 ```
 
-4. **Tornar os cards clicáveis:**
-Adicionar `onClick` e `cursor-pointer` nos cards.
+---
 
-5. **Renderizar o Dialog:**
-Exibir o conteúdo completo quando um serviço estiver selecionado.
+### Etapas de Implementação
+
+1. Solicitar a API Key do Resend ao usuário
+2. Criar a função backend `send-contact-notification`
+3. Atualizar `src/pages/Contact.tsx` para chamar a função após o envio
 
 ---
 
-### Textos Persuasivos Planejados
+### Observação
 
-**Psicologia:**
-"A pressão do mercado, os bloqueios criativos e a ansiedade de palco podem destruir carreiras promissoras. Oferecemos acompanhamento psicológico especializado para artistas, ajudando você a manter a mente blindada enquanto conquista o sucesso. Artistas emocionalmente preparados performam melhor e duram mais no mercado."
-
-**Jurídico:**
-"Contratos mal feitos, direitos autorais não registrados e burocracias do ECAD são armadilhas que podem custar anos de trabalho. Nossa equipe jurídica cuida de toda a documentação, garantindo que você esteja 100% protegido para focar apenas na sua arte."
-
-**Produção:**
-"Seu talento merece uma produção à altura. Oferecemos gravação, mixagem e masterização com qualidade de mercado, transformando suas ideias em músicas que competem de igual para igual com grandes artistas."
-
-**Branding:**
-"No mercado atual, imagem é tão importante quanto talento. Construímos sua identidade visual, posicionamento e discurso de forma estratégica, criando uma marca que gera conexão instantânea com seu público."
-
-**Marketing:**
-"Ter música boa não basta se ninguém ouve. Criamos estratégias de tráfego pago, gestão de redes sociais e campanhas de alcance que colocam sua arte na frente das pessoas certas, no momento certo."
-
-**Vendas:**
-"Shows, eventos e parcerias são onde a música vira renda. Negociamos por você, garantindo as melhores condições e contratos justos. Enquanto você faz arte, nós fazemos dinheiro para você."
-
-**Planejamento:**
-"Sem direção, até o maior talento se perde. Criamos um mapa estratégico da sua carreira com metas claras, prazos definidos e etapas concretas. Você saberá exatamente onde está, para onde vai e como chegar lá."
-
----
-
-### Resultado Visual
-
-Ao clicar em qualquer card:
-- Abre um modal centralizado com overlay escuro
-- Exibe o ícone do serviço, título em destaque
-- Texto expandido persuasivo (2-3 parágrafos)
-- Botão para fechar (X) no canto superior direito
-
-Os cards terão efeito hover melhorado para indicar que são clicáveis.
+O email de destino (admin) será configurado diretamente no código. Será necessário informar qual email deve receber as notificações, ou será usado o email padrão `contato@7produtora.com.br` que já aparece na página de contato.
